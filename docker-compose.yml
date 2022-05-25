@@ -1,0 +1,117 @@
+version: "3.8"
+services:
+
+  # Applications
+
+  book-service:
+    image: ghcr.io/thomasvitale/springio/book-service:initial-arm64
+    container_name: book-service
+    depends_on:
+      - fluent-bit
+      - keycloak
+    ports:
+      - 9001:9001
+    environment:
+      - JAVA_TOOL_OPTIONS=-javaagent:/workspace/BOOT-INF/lib/opentelemetry-javaagent-1.12.1.jar
+      - OTEL_SERVICE_NAME=catalog-service
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://host.docker.internal:8080/auth/realms/PolarBookshop
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
+
+  edge-service:
+    image: ghcr.io/thomasvitale/springio/edge-service:initial-arm64
+    container_name: edge-service
+    depends_on:
+      - fluent-bit
+      - keycloak
+    ports:
+      - 9000:9000
+    environment:
+      - BOOK_SERVICE_URL=http://book-service:9001
+      - JAVA_TOOL_OPTIONS=-javaagent:/workspace/BOOT-INF/lib/opentelemetry-javaagent-1.12.1.jar
+      - OTEL_SERVICE_NAME=edge-service
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4317
+      - SPRING_REDIS_HOST=redis
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI=http://host.docker.internal:8080/auth/realms/PolarBookshop
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
+
+  # Backing Services
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - 6379:6379
+
+  keycloak:
+    image: ghcr.io/thomasvitale/keycloak:17.0.0-amd64 # Use quay.io/keycloak:17.0.0-legacy on Intel processors
+    container_name: "keycloak"
+    volumes:
+      - ./platform/keycloak:/opt/jboss/keycloak/imports
+    environment:
+      - KEYCLOAK_USER=user
+      - KEYCLOAK_PASSWORD=password
+      - KEYCLOAK_IMPORT=/opt/jboss/keycloak/imports/realm-export.json
+    ports:
+      - 8080:8080
+
+  # Observability
+
+  grafana:
+    image: grafana/grafana:8.4.4
+    container_name: grafana
+    depends_on:
+      - loki
+      - prometheus
+      - tempo
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=user
+      - GF_SECURITY_ADMIN_PASSWORD=password
+    volumes:
+      - ./platform/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+      - ./platform/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./platform/grafana/grafana.ini:/etc/grafana/grafana.ini
+
+  loki:
+    image: grafana/loki:2.4.2
+    container_name: loki
+    depends_on:
+      - fluent-bit
+    ports:
+      - "3100:3100"
+
+  fluent-bit:
+    image: grafana/fluent-bit-plugin-loki:2.4.2-amd64
+    container_name: fluent-bit
+    ports:
+      - "24224:24224"
+    environment:
+      - LOKI_URL=http://loki:3100/loki/api/v1/push
+    volumes:
+      - ./platform/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+
+  prometheus:
+    image: prom/prometheus:v2.34.0
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./platform/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  tempo:
+    image: grafana/tempo:1.3.2
+    container_name: tempo
+    command: -config.file /etc/tempo-config.yml
+    ports:
+      - "3110:3100"     # Tempo
+      - "4317:4317"     # OTel
+    volumes:
+      - ./platform/tempo/tempo.yml:/etc/tempo-config.yml
