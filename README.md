@@ -1,4 +1,4 @@
-# Spring Cloud Gateway - Resilience, Security, and Observability (Devoxx UK 2022)
+# Spring Cloud Gateway - Resilience, Security, and Observability (Spring I/O 2022)
 
 Do you want to use a microservices architecture? Are you looking for a solution to manage access to single services
 from clients? How can you ensure resilience and security for your entire system? Spring Cloud Gateway is a project
@@ -13,7 +13,7 @@ to do that with Spring Security, OAuth2, and OpenID Connect, relying on Spring R
 Finally, I'll show you how to improve the observability of your system using Spring Boot Actuator
 and Spring Cloud Sleuth and relying on the Grafana stack.
 
-[Conference Session](https://www.devoxx.co.uk/talk/?id=6888)
+[Conference Session](https://2022.springio.net/sessions/spring-cloud-gateway-resilience-security-and-observability)
 
 ## Usage
 
