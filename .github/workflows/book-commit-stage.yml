@@ -4,7 +4,7 @@ on: push
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: thomasvitale/springio/book-service
-  VERSION: security
+  VERSION: latest
 
 jobs:
   build:
