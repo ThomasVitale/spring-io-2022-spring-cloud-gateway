@@ -3,7 +3,11 @@ package com.thomasvitale.bookservice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.autoconfigure.security.reactive.EndpointRequest;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
@@ -13,6 +17,17 @@ public class BookServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BookServiceApplication.class, args);
+    }
+
+    @Bean
+    SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+        return http
+                .authorizeExchange(exchange ->
+                        exchange.matchers(EndpointRequest.toAnyEndpoint()).permitAll()
+                                .anyExchange().authenticated()
+                )
+                .oauth2ResourceServer(ServerHttpSecurity.OAuth2ResourceServerSpec::jwt)
+                .build();
     }
 
 }
