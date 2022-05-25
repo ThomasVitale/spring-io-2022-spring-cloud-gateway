@@ -34,7 +34,7 @@ dependencies {
     //implementation 'io.github.resilience4j:resilience4j-micrometer'
 
     // Redis
-    //implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
 
     // Security
     //implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'

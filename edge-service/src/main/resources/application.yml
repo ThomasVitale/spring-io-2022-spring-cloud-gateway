@@ -16,6 +16,13 @@ spring:
     name: edge-service
   cloud:
     gateway:
+      default-filters:
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter:
+              replenishRate: 10
+              burstCapacity: 20
+              requestedTokens: 1
       routes:
         - id: book-route
           uri: ${BOOK_SERVICE_URL:http://localhost:9001}

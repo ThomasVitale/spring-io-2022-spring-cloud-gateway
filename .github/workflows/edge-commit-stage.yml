@@ -4,7 +4,7 @@ on: push
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: thomasvitale/springio/edge-service
-  VERSION: retries
+  VERSION: rate-limiter
 
 jobs:
   build:
