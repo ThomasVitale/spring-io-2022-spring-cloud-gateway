@@ -24,3 +24,10 @@ spring:
           filters:
             - AddRequestHeader=X-Tenant,acme
             - AddResponseHeader=X-Genre,fantasy
+            - name: Retry
+              args:
+                retries: 3
+                method: GET
+                backoff:
+                  firstBackoff: 50ms
+                  maxBackoff: 500ms

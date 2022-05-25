@@ -4,7 +4,7 @@ services:
   # Applications
 
   book-service:
-    image: ghcr.io/thomasvitale/springio/book-service:routes-arm64
+    image: ghcr.io/thomasvitale/springio/book-service:retries-arm64
     container_name: book-service
     depends_on:
       - fluent-bit
@@ -22,7 +22,7 @@ services:
         fluentd-address: 127.0.0.1:24224
 
   edge-service:
-    image: ghcr.io/thomasvitale/springio/edge-service:routes-arm64
+    image: ghcr.io/thomasvitale/springio/edge-service:retries-arm64
     container_name: edge-service
     depends_on:
       - fluent-bit
