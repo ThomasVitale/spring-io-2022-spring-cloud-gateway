@@ -26,7 +26,7 @@ provided by Spring Boot. For each application, run the following task:
 ./gradlew bootBuildImage
 ```
 
-Then, from the project root folder, run Docker Compose.
+Then, from the project root folder, run Docker Compose, after updating the docker-compose.yml file with your own images. If you prefer to use the ones provided with this project, you can use the current configuration without any changes and without the need to build the applications locally.
 
 ```bash
 docker-compose up -d
@@ -51,7 +51,7 @@ you can query logs from Loki, metrics from Prometheus, and traces from Tempo.
 Logs are available for inspecting from Grafana.
 
 **Tempo** is a distributed tracing backend part of the Grafana observability stack. Spring Boot applications sends traces to Tempo,
-which made them available for inspecting from Grafana.
+which made them available for inspecting from Grafana. The traces follows the OpenTelemetry format and protocol.
 
 **Prometheus** is a monitoring system part of the Grafana observability stack. It parses the metrics endpoints exposed by Spring Boot
 applications (`/actuator/prometheus`). Metrics are available for inspecting and dashboarding from Grafana.

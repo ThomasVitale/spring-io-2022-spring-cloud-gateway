@@ -4,7 +4,8 @@ services:
   # Applications
 
   book-service:
-    image: ghcr.io/thomasvitale/springio/book-service:latest-arm64
+    # Use ghcr.io/thomasvitale/springio/book-service:latest-arm64 on Apple M1
+    image: ghcr.io/thomasvitale/springio/book-service
     container_name: book-service
     depends_on:
       - fluent-bit
@@ -22,7 +23,8 @@ services:
         fluentd-address: 127.0.0.1:24224
 
   edge-service:
-    image: ghcr.io/thomasvitale/springio/edge-service:latest-arm64
+    # Use ghcr.io/thomasvitale/springio/edge-service:latest-arm64 on Apple M1
+    image: ghcr.io/thomasvitale/springio/edge-service:latest
     container_name: edge-service
     depends_on:
       - fluent-bit
