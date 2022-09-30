@@ -52,7 +52,7 @@ services:
       - 6379:6379
 
   keycloak:
-    image: ghcr.io/thomasvitale/keycloak:17.0.0-amd64 # Use quay.io/keycloak:17.0.0-legacy on Intel processors
+    image: ghcr.io/thomasvitale/keycloak:17.0.0-amd64 # Use quay.io/keycloak/keycloak:17.0.0 on Intel processors
     container_name: "keycloak"
     volumes:
       - ./platform/keycloak:/opt/jboss/keycloak/imports
