@@ -1,5 +1,8 @@
 # Spring Cloud Gateway - Resilience, Security, and Observability (Spring I/O 2022)
 
+> **Warning**
+> This repository is not maintained anymore. For up-to-date examples, refer to [github.com/ThomasVitale/spring-cloud-gateway-resilience-security-observability](https://github.com/ThomasVitale/spring-cloud-gateway-resilience-security-observability).
+
 Do you want to use a microservices architecture? Are you looking for a solution to manage access to single services
 from clients? How can you ensure resilience and security for your entire system? Spring Cloud Gateway is a project
 based on Reactor, Spring WebFlux, and Spring Boot which provides an effective way to route traffic to your APIs and
